@@ -8,19 +8,33 @@ const bag: Record<string, number> = {
   blue: 14,
 };
 
+function getTurns(str: string): string[] {
+  return str.split(': ').slice(1, str.length)[0].split(';');
+}
+
+function extractCube(cube: string) {
+  const cubeArray = cube.trim().split(' ');
+  const cubeColor = cubeArray[1];
+  const cubeNumber = Number(cubeArray[0]);
+
+  return { cubeColor, cubeNumber };
+}
+
+function multiplyValuesInObject(obj: Record<string, number>): number {
+  return Object.values(obj).reduce((acc, value) => acc * value, 1);
+}
+
 function getGamesIdSum(): number {
   const result = puzzleArray.reduce((acc, curr, index) => {
     let isValidGame = true;
     const gameIndex = index + 1;
-    const turns = curr.split(': ').slice(1, curr.length)[0].split(';');
+    const turns = getTurns(curr);
 
     turns.forEach((turn) => {
       turn.split(',').forEach((cube) => {
-        const cubeArray = cube.trim().split(' ');
-        const color = cubeArray[1];
-        const number = Number(cubeArray[0]);
+        const { cubeColor, cubeNumber } = extractCube(cube);
 
-        if (bag[color] < number) {
+        if (bag[cubeColor] < cubeNumber) {
           return (isValidGame = false);
         }
       });
@@ -38,31 +52,24 @@ function getGamesIdSum(): number {
 
 function getPowerOfCubes() {
   const result = puzzleArray.reduce((acc, curr) => {
-    const turns = curr.split(': ').slice(1, curr.length)[0].split(';');
     const minimalBag: Record<string, number> = {
       red: 0,
       green: 0,
       blue: 0,
     };
+    const turns = getTurns(curr);
 
     turns.forEach((turn) => {
       turn.split(',').forEach((cube) => {
-        const cubeArray = cube.trim().split(' ');
-        const color = cubeArray[1];
-        const number = Number(cubeArray[0]);
+        const { cubeColor, cubeNumber } = extractCube(cube);
 
-        if (minimalBag[color] < number) {
-          minimalBag[color] = number;
+        if (minimalBag[cubeColor] < cubeNumber) {
+          minimalBag[cubeColor] = cubeNumber;
         }
       });
     });
 
-    const multipliedMinimalBag = Object.values(minimalBag).reduce(
-      (acc, value) => acc * value,
-      1
-    );
-
-    return acc + multipliedMinimalBag;
+    return acc + multiplyValuesInObject(minimalBag);
   }, 0);
 
   return result;
