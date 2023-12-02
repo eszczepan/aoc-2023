@@ -36,6 +36,39 @@ function getGamesIdSum(): number {
   return result;
 }
 
-const gamesIdSum = getGamesIdSum();
+function getPowerOfCubes() {
+  const result = puzzleArray.reduce((acc, curr) => {
+    const turns = curr.split(': ').slice(1, curr.length)[0].split(';');
+    const minimalBag: Record<string, number> = {
+      red: 0,
+      green: 0,
+      blue: 0,
+    };
 
-console.log({ gamesIdSum });
+    turns.forEach((turn) => {
+      turn.split(',').forEach((cube) => {
+        const cubeArray = cube.trim().split(' ');
+        const color = cubeArray[1];
+        const number = Number(cubeArray[0]);
+
+        if (minimalBag[color] < number) {
+          minimalBag[color] = number;
+        }
+      });
+    });
+
+    const multipliedMinimalBag = Object.values(minimalBag).reduce(
+      (acc, value) => acc * value,
+      1
+    );
+
+    return acc + multipliedMinimalBag;
+  }, 0);
+
+  return result;
+}
+
+const gamesIdSum = getGamesIdSum();
+const gamesPowerSum = getPowerOfCubes();
+
+console.log({ gamesIdSum, gamesPowerSum });
