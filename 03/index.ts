@@ -1,7 +1,7 @@
-const path = "./03/puzzle.txt";
+const path = './03/puzzle.txt';
 const file = Bun.file(path);
 const text = await file.text();
-const puzzleArray = text.split("\n");
+const puzzleArray = text.split('\n');
 const isDigitRegex = /^\d+$/;
 
 interface Elements {
@@ -17,7 +17,7 @@ function isDigit(str: string): boolean {
 function checkIsEnginePart(elementsToCheck: string[]): boolean {
   let isEnginePart = false;
   elementsToCheck.forEach((element) => {
-    if (element && !isDigit(element) && element !== ".") {
+    if (element && !isDigit(element) && element !== '.') {
       isEnginePart = true;
     }
   });
@@ -25,22 +25,18 @@ function checkIsEnginePart(elementsToCheck: string[]): boolean {
   return isEnginePart;
 }
 
-function getElements(
-  elementIndex: number,
-  rowIndex: number,
-  currentRow: string
-): Elements {
-  const previousRow = puzzleArray[rowIndex - 1] || "";
-  const nextRow = puzzleArray[rowIndex + 1] || "";
+function getElements(elementIndex: number, rowIndex: number, currentRow: string): Elements {
+  const previousRow = puzzleArray[rowIndex - 1] || '';
+  const nextRow = puzzleArray[rowIndex + 1] || '';
 
-  const previousElement = currentRow[elementIndex - 1] || "";
-  const nextElement = currentRow[elementIndex + 1] || "";
-  const topLeftElement = previousRow[elementIndex - 1] || "";
-  const topElement = previousRow[elementIndex] || "";
-  const topRightElement = previousRow[elementIndex + 1] || "";
-  const bottomLeftElement = nextRow[elementIndex - 1] || "";
-  const bottomElement = nextRow[elementIndex] || "";
-  const bottomRightElement = nextRow[elementIndex + 1] || "";
+  const previousElement = currentRow[elementIndex - 1] || '';
+  const nextElement = currentRow[elementIndex + 1] || '';
+  const topLeftElement = previousRow[elementIndex - 1] || '';
+  const topElement = previousRow[elementIndex] || '';
+  const topRightElement = previousRow[elementIndex + 1] || '';
+  const bottomLeftElement = nextRow[elementIndex - 1] || '';
+  const bottomElement = nextRow[elementIndex] || '';
+  const bottomRightElement = nextRow[elementIndex + 1] || '';
   const elementsToCheck = [
     previousElement,
     nextElement,
@@ -61,7 +57,7 @@ function getElements(
 
 function getEnginePartsSum(): number {
   let result = 0;
-  let currentNumber = "";
+  let currentNumber = '';
   let isEnginePart = false;
 
   for (let i = 0; i < puzzleArray.length; i++) {
@@ -80,7 +76,7 @@ function getEnginePartsSum(): number {
       // FIRST ELEMENT OF ROW - clear state
       if (previousElement === undefined) {
         isEnginePart = false;
-        currentNumber = "";
+        currentNumber = '';
       }
 
       // SET CURRENT NUMBER
@@ -98,7 +94,7 @@ function getEnginePartsSum(): number {
         }
 
         isEnginePart = false;
-        currentNumber = "";
+        currentNumber = '';
       }
     }
   }
@@ -115,25 +111,21 @@ interface GearElements {
 }
 
 function isStarSign(element: string): boolean {
-  return element === "*";
+  return element === '*';
 }
 
-function getGearElements(
-  elementIndex: number,
-  rowIndex: number,
-  currentRow: string
-): GearElements {
-  const previousRow = puzzleArray[rowIndex - 1] || "";
-  const nextRow = puzzleArray[rowIndex + 1] || "";
+function getGearElements(elementIndex: number, rowIndex: number, currentRow: string): GearElements {
+  const previousRow = puzzleArray[rowIndex - 1] || '';
+  const nextRow = puzzleArray[rowIndex + 1] || '';
 
-  const previousElement = currentRow[elementIndex - 1] || "";
-  const nextElement = currentRow[elementIndex + 1] || "";
-  const topLeftElement = previousRow[elementIndex - 1] || "";
-  const topElement = previousRow[elementIndex] || "";
-  const topRightElement = previousRow[elementIndex + 1] || "";
-  const bottomLeftElement = nextRow[elementIndex - 1] || "";
-  const bottomElement = nextRow[elementIndex] || "";
-  const bottomRightElement = nextRow[elementIndex + 1] || "";
+  const previousElement = currentRow[elementIndex - 1] || '';
+  const nextElement = currentRow[elementIndex + 1] || '';
+  const topLeftElement = previousRow[elementIndex - 1] || '';
+  const topElement = previousRow[elementIndex] || '';
+  const topRightElement = previousRow[elementIndex + 1] || '';
+  const bottomLeftElement = nextRow[elementIndex - 1] || '';
+  const bottomElement = nextRow[elementIndex] || '';
+  const bottomRightElement = nextRow[elementIndex + 1] || '';
   const topElements = [topLeftElement, topElement, topRightElement];
   const bottomElements = [bottomLeftElement, bottomElement, bottomRightElement];
 
@@ -145,16 +137,12 @@ function getGearElements(
   };
 }
 
-function getNumberForVertical(
-  element: string,
-  elementIndex: number,
-  row: string
-) {
+function getNumberForVertical(element: string, elementIndex: number, row: string) {
   let number = element;
-  const secondPreviousElement = row[elementIndex - 2] || "";
-  const previousElement = row[elementIndex - 1] || "";
-  const nextElement = row[elementIndex + 1] || "";
-  const secondNextElement = row[elementIndex + 2] || "";
+  const secondPreviousElement = row[elementIndex - 2] || '';
+  const previousElement = row[elementIndex - 1] || '';
+  const nextElement = row[elementIndex + 1] || '';
+  const secondNextElement = row[elementIndex + 2] || '';
 
   if (isDigit(previousElement)) {
     number = previousElement + number;
@@ -176,12 +164,9 @@ function getDigitsFromElements(elements: string[]) {
   const digits = [];
   for (let i = 0; i < elements.length; i++) {
     const element = elements[i];
-    const previousElement = elements[i - 1] || "";
-    const nextElement = elements[i + 1] || "";
-    if (
-      isDigit(element) &&
-      (previousElement === "." || nextElement === "." || i - 1 === 0)
-    ) {
+    const previousElement = elements[i - 1] || '';
+    const nextElement = elements[i + 1] || '';
+    if (isDigit(element) && (previousElement === '.' || nextElement === '.' || i - 1 === 0)) {
       digits.push({ element, position: i - 1 });
     }
   }
@@ -203,8 +188,7 @@ function getGearRatioSum() {
         continue;
       }
 
-      const { previousElement, topElements, bottomElements, nextElement } =
-        getGearElements(j, i, currentRow);
+      const { previousElement, topElements, bottomElements, nextElement } = getGearElements(j, i, currentRow);
 
       const topDigits = getDigitsFromElements(topElements);
 
@@ -214,13 +198,9 @@ function getGearRatioSum() {
       if (topDigits.length > 0) {
         topDigits.forEach((digit) => {
           const topDigitIndex = digit.position + j;
-          const previousRow = puzzleArray[i - 1] || "";
+          const previousRow = puzzleArray[i - 1] || '';
 
-          const topNumber = getNumberForVertical(
-            digit.element,
-            topDigitIndex,
-            previousRow
-          );
+          const topNumber = getNumberForVertical(digit.element, topDigitIndex, previousRow);
 
           partNumbers.push(topNumber);
         });
@@ -229,8 +209,8 @@ function getGearRatioSum() {
       // CHECK NEXT ELEMENT
       if (isDigit(nextElement)) {
         let nextNumber = nextElement;
-        const secondNextElement = currentRow[j + 2] || "";
-        const thirdNextElement = currentRow[j + 3] || "";
+        const secondNextElement = currentRow[j + 2] || '';
+        const thirdNextElement = currentRow[j + 3] || '';
 
         if (isDigit(secondNextElement)) {
           nextNumber = nextNumber + secondNextElement;
@@ -247,12 +227,8 @@ function getGearRatioSum() {
       if (bottomDigits.length > 0) {
         bottomDigits.forEach((digit) => {
           const bottomDigitIndex = digit.position + j;
-          const nextRow = puzzleArray[i + 1] || "";
-          const topNumber = getNumberForVertical(
-            digit.element,
-            bottomDigitIndex,
-            nextRow
-          );
+          const nextRow = puzzleArray[i + 1] || '';
+          const topNumber = getNumberForVertical(digit.element, bottomDigitIndex, nextRow);
 
           partNumbers.push(topNumber);
         });
@@ -261,8 +237,8 @@ function getGearRatioSum() {
       // CHECK PREVIOUS ELEMENTS
       if (isDigit(previousElement)) {
         let previousNumber = previousElement;
-        const secondPreviousElement = currentRow[j - 2] || "";
-        const thirdPreviousElement = currentRow[j - 3] || "";
+        const secondPreviousElement = currentRow[j - 2] || '';
+        const thirdPreviousElement = currentRow[j - 3] || '';
 
         if (isDigit(secondPreviousElement)) {
           previousNumber = secondPreviousElement + previousNumber;
