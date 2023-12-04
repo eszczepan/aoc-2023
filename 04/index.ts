@@ -4,7 +4,6 @@ const text = await file.text();
 const puzzleArray = text.split('\n');
 
 function getScratchcardsPoints(): number {
-  let score = 0;
   const scratchcardsTable = puzzleArray.map((line) => {
     const indexOfColon = line.indexOf(':');
     const convertedScratchcards = line.slice(indexOfColon + 2, line.length).split(' | ');
@@ -12,10 +11,10 @@ function getScratchcardsPoints(): number {
     return convertedScratchcards;
   });
 
-  for (let i = 0; i < scratchcardsTable.length; i++) {
+  const score = scratchcardsTable.reduce((acc, scratchcards) => {
     let scoreCard = 0;
-    const winningCard = scratchcardsTable[i][0].split(' ');
-    const scratchCard = scratchcardsTable[i][1].split(' ');
+    const winningCard = scratchcards[0].split(' ');
+    const scratchCard = scratchcards[1].split(' ');
 
     winningCard.forEach((card) => {
       if (card && scratchCard.includes(card)) {
@@ -23,8 +22,8 @@ function getScratchcardsPoints(): number {
       }
     });
 
-    score += scoreCard;
-  }
+    return acc + scoreCard;
+  }, 0);
 
   return score;
 }
