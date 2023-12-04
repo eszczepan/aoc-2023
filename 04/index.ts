@@ -19,6 +19,10 @@ function getCards(scratchcards: string[]) {
   return { winningCard, scratchCard };
 }
 
+function sumObjectValues(obj: Record<string, number>): number {
+  return Object.values(obj).reduce((acc, value) => acc + value, 0);
+}
+
 function getScratchcardsPoints(): number {
   const scratchcardsTable = getScratchcardsTable();
 
@@ -62,7 +66,7 @@ function getScratchcardsNumber(): number {
     {}
   );
 
-  const scratchcardsNumber = Object.values(scratchCardsCopies).reduce((a: number, b: number) => a + b, 0);
+  const scratchcardsNumber = sumObjectValues(scratchCardsCopies);
 
   return scratchcardsNumber;
 }
