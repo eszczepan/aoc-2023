@@ -1,7 +1,6 @@
-const path = './01/puzzle.txt';
-const file = Bun.file(path);
-const text = await file.text();
-const puzzleArray = text.split('\n');
+import { getInput } from '../utils';
+
+const input = await getInput('01/input.txt');
 
 function convertWordsToDigits(str: string): string {
   const wordsToDigits: { [key: string]: string } = {
@@ -23,8 +22,8 @@ function convertWordsToDigits(str: string): string {
   return str;
 }
 
-function getCalibrationSum(): number {
-  const result = puzzleArray.reduce((acc, curr) => {
+function getCalibrationSum(input: string[]): number {
+  const result = input.reduce((acc, curr) => {
     const digits = curr.replace(/\D/g, '');
 
     return acc + getSumOfDigits(digits);
@@ -41,8 +40,8 @@ function getSumOfDigits(digits: string): number {
   return Number(mergedDigits);
 }
 
-function getCalibrationSum2() {
-  const result = puzzleArray.reduce((acc, curr) => {
+function getCalibrationSum2(input: string[]): number {
+  const result = input.reduce((acc, curr) => {
     const convertedString = convertWordsToDigits(curr);
     const digits = convertedString.replace(/\D/g, '');
 
@@ -52,7 +51,7 @@ function getCalibrationSum2() {
   return result;
 }
 
-const calibrationSum = getCalibrationSum();
-const calibrationSum2 = getCalibrationSum2();
+const calibrationSum = getCalibrationSum(input);
+const calibrationSum2 = getCalibrationSum2(input);
 
 console.log({ calibrationSum, calibrationSum2 });

@@ -1,7 +1,6 @@
-const path = './03/puzzle.txt';
-const file = Bun.file(path);
-const text = await file.text();
-const puzzleArray = text.split('\n');
+import { getInput } from '../utils';
+
+const input = await getInput('03/input.txt');
 const isDigitRegex = /^\d+$/;
 
 interface Elements {
@@ -25,9 +24,9 @@ function checkIsEnginePart(elementsToCheck: string[]): boolean {
   return isEnginePart;
 }
 
-function getElements(elementIndex: number, rowIndex: number, currentRow: string): Elements {
-  const previousRow = puzzleArray[rowIndex - 1] || '';
-  const nextRow = puzzleArray[rowIndex + 1] || '';
+function getElements(input: string[], elementIndex: number, rowIndex: number, currentRow: string): Elements {
+  const previousRow = input[rowIndex - 1] || '';
+  const nextRow = input[rowIndex + 1] || '';
 
   const previousElement = currentRow[elementIndex - 1] || '';
   const nextElement = currentRow[elementIndex + 1] || '';
@@ -55,13 +54,13 @@ function getElements(elementIndex: number, rowIndex: number, currentRow: string)
   };
 }
 
-function getEnginePartsSum(): number {
+function getEnginePartsSum(input: string[]): number {
   let result = 0;
   let currentNumber = '';
   let isEnginePart = false;
 
-  for (let i = 0; i < puzzleArray.length; i++) {
-    const currentRow = puzzleArray[i];
+  for (let i = 0; i < input.length; i++) {
+    const currentRow = input[i];
 
     for (let j = 0; j < currentRow.length; j++) {
       const currentElement = currentRow[j];
@@ -70,7 +69,7 @@ function getEnginePartsSum(): number {
         continue;
       }
 
-      const elements = getElements(j, i, currentRow);
+      const elements = getElements(input, j, i, currentRow);
       const { previousElement, elementsToCheck, nextElement } = elements;
 
       // FIRST ELEMENT OF ROW - clear state
@@ -115,8 +114,8 @@ function isStarSign(element: string): boolean {
 }
 
 function getGearElements(elementIndex: number, rowIndex: number, currentRow: string): GearElements {
-  const previousRow = puzzleArray[rowIndex - 1] || '';
-  const nextRow = puzzleArray[rowIndex + 1] || '';
+  const previousRow = input[rowIndex - 1] || '';
+  const nextRow = input[rowIndex + 1] || '';
 
   const previousElement = currentRow[elementIndex - 1] || '';
   const nextElement = currentRow[elementIndex + 1] || '';
@@ -174,11 +173,11 @@ function getDigitsFromElements(elements: string[]) {
   return digits;
 }
 
-function getGearRatioSum() {
+function getGearRatioSum(input: string[]): number {
   let result = 0;
 
-  for (let i = 0; i < puzzleArray.length; i++) {
-    const currentRow = puzzleArray[i];
+  for (let i = 0; i < input.length; i++) {
+    const currentRow = input[i];
 
     for (let j = 0; j < currentRow.length; j++) {
       const currentElement = currentRow[j];
@@ -198,7 +197,7 @@ function getGearRatioSum() {
       if (topDigits.length > 0) {
         topDigits.forEach((digit) => {
           const topDigitIndex = digit.position + j;
-          const previousRow = puzzleArray[i - 1] || '';
+          const previousRow = input[i - 1] || '';
 
           const topNumber = getNumberForVertical(digit.element, topDigitIndex, previousRow);
 
@@ -227,7 +226,7 @@ function getGearRatioSum() {
       if (bottomDigits.length > 0) {
         bottomDigits.forEach((digit) => {
           const bottomDigitIndex = digit.position + j;
-          const nextRow = puzzleArray[i + 1] || '';
+          const nextRow = input[i + 1] || '';
           const topNumber = getNumberForVertical(digit.element, bottomDigitIndex, nextRow);
 
           partNumbers.push(topNumber);
@@ -259,7 +258,7 @@ function getGearRatioSum() {
   return result;
 }
 
-const enginePartsSum = getEnginePartsSum();
-const gearRatioSum = getGearRatioSum();
+const enginePartsSum = getEnginePartsSum(input);
+const gearRatioSum = getGearRatioSum(input);
 
 console.log({ enginePartsSum, gearRatioSum });

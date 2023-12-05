@@ -1,7 +1,6 @@
-const path = './02/puzzle.txt';
-const file = Bun.file(path);
-const text = await file.text();
-const puzzleArray = text.split('\n');
+import { getInput } from '../utils';
+
+const input = await getInput('02/input.txt');
 const bag: Record<string, number> = {
   red: 12,
   green: 13,
@@ -24,8 +23,8 @@ function multiplyValuesInObject(obj: Record<string, number>): number {
   return Object.values(obj).reduce((acc, value) => acc * value, 1);
 }
 
-function getGamesIdSum(): number {
-  const result = puzzleArray.reduce((acc, curr, index) => {
+function getGamesIdSum(input: string[]): number {
+  const result = input.reduce((acc, curr, index) => {
     let isValidGame = true;
     const gameIndex = index + 1;
     const turns = getTurns(curr);
@@ -50,8 +49,8 @@ function getGamesIdSum(): number {
   return result;
 }
 
-function getPowerOfCubes() {
-  const result = puzzleArray.reduce((acc, curr) => {
+function getPowerOfCubes(input: string[]): number {
+  const result = input.reduce((acc, curr) => {
     const minimalBag: Record<string, number> = {
       red: 0,
       green: 0,
@@ -75,7 +74,7 @@ function getPowerOfCubes() {
   return result;
 }
 
-const gamesIdSum = getGamesIdSum();
-const gamesPowerSum = getPowerOfCubes();
+const gamesIdSum = getGamesIdSum(input);
+const gamesPowerSum = getPowerOfCubes(input);
 
 console.log({ gamesIdSum, gamesPowerSum });

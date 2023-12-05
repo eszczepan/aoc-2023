@@ -1,10 +1,9 @@
-const path = './04/puzzle.txt';
-const file = Bun.file(path);
-const text = await file.text();
-const puzzleArray = text.split('\n');
+import { getInput } from '../utils';
 
-function getScratchcardsTable(): Array<Array<string>> {
-  return puzzleArray.map((line) => {
+const input = await getInput('03/input.txt');
+
+function getScratchcardsTable(input: string[]): Array<Array<string>> {
+  return input.map((line) => {
     const indexOfColon = line.indexOf(':');
     const convertedScratchcards = line.slice(indexOfColon + 2, line.length).split(' | ');
 
@@ -23,8 +22,8 @@ function sumObjectValues(obj: Record<string, number>): number {
   return Object.values(obj).reduce((acc, value) => acc + value, 0);
 }
 
-function getScratchcardsPoints(): number {
-  const scratchcardsTable = getScratchcardsTable();
+function getScratchcardsPoints(input: string[]): number {
+  const scratchcardsTable = getScratchcardsTable(input);
 
   const score = scratchcardsTable.reduce((acc, scratchcards) => {
     const { winningCard, scratchCard } = getCards(scratchcards);
@@ -42,8 +41,8 @@ function getScratchcardsPoints(): number {
   return score;
 }
 
-function getScratchcardsNumber(): number {
-  const scratchcardsTable = getScratchcardsTable();
+function getScratchcardsNumber(input: string[]): number {
+  const scratchcardsTable = getScratchcardsTable(input);
   const scratchCardsCopies = scratchcardsTable.reduce(
     (cards: Record<string, number>, scratchcards: string[], index: number) => {
       const { winningCard, scratchCard } = getCards(scratchcards);
@@ -71,6 +70,6 @@ function getScratchcardsNumber(): number {
   return scratchcardsNumber;
 }
 
-const scratchcardsPoints = getScratchcardsPoints();
-const scratchcardsNumber = getScratchcardsNumber();
+const scratchcardsPoints = getScratchcardsPoints(input);
+const scratchcardsNumber = getScratchcardsNumber(input);
 console.log({ scratchcardsPoints, scratchcardsNumber });
