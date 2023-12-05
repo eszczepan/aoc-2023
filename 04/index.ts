@@ -1,6 +1,6 @@
 import { getInput } from '../utils';
 
-const input = await getInput('03/input.txt');
+const input = await getInput('04/input.txt');
 
 function getScratchcardsTable(input: string[]): Array<Array<string>> {
   return input.map((line) => {
