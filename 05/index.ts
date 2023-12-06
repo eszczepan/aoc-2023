@@ -1,6 +1,6 @@
 import { getInput } from '../utils';
 
-const input = await getInput('05/input.txt');
+const input = await getInput('05/sample.txt');
 const inputStr = input.join('\n');
 const categoriesHeaders = [
   'seeds',
@@ -31,10 +31,8 @@ function getMap(input: string): Array<Array<string>> {
   }, []);
 }
 
-function getLowestLocation(input: string): number {
-  const [s, ...categories] = getMap(input);
-  const seeds = s[0].split(' ');
-  const locations = seeds.map((seed) => {
+function getLocations(seeds: Array<string | number>, categories: Array<Array<string>>) {
+  return seeds.map((seed) => {
     let location = Number(seed);
 
     categories.forEach((category) => {
@@ -50,10 +48,35 @@ function getLowestLocation(input: string): number {
 
     return Number(location);
   });
+}
+
+function getLowestLocation(input: string): number {
+  const [s, ...categories] = getMap(input);
+  const seeds = s[0].split(' ');
+  const locations = getLocations(seeds, categories);
+
+  return Math.min(...locations);
+}
+
+function getLowestLocationForRanges(input: string): number {
+  const [s, ...categories] = getMap(input);
+
+  const seedArr = s[0].split(' ');
+  const seedsRange = seedArr.flatMap((seed, i) => {
+    if (i % 2 === 0) {
+      const start = Number(seed);
+      const length = Number(seedArr[i + 1]);
+      return Array.from({ length }, (_, i) => start + i);
+    }
+    return [];
+  });
+
+  const locations = getLocations(seedsRange, categories);
 
   return Math.min(...locations);
 }
 
 const lowestLocation = getLowestLocation(inputStr);
+const lowestLocationFromRanges = getLowestLocationForRanges(inputStr);
 
-console.log({ lowestLocation });
+console.log({ lowestLocation, lowestLocationFromRanges });
