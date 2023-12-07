@@ -1,25 +1,37 @@
 import { getInput } from '../utils';
 
 const input = await getInput('07/input.txt');
-const cardsStrength: Record<string, number> = {
-  A: 13,
-  K: 12,
-  Q: 11,
-  J: 10,
-  T: 9,
-  '9': 8,
-  '8': 7,
-  '7': 6,
-  '6': 5,
-  '5': 4,
-  '4': 3,
-  '3': 2,
-  '2': 1,
-};
+const cardsStrength = ['2', '3', '4', '5', '6', '7', '8', '9', 'T', , 'J', 'Q', 'K', 'A'];
+type HandsRank = Array<[string, string, number]>;
 
-function getTotalWinnings(input: string[]) {
+function calculateTotalWinnings(handsRank: HandsRank): number {
+  return handsRank.reduce((acc, [, bid], index) => {
+    acc += Number(bid) * (index + 1);
+    return acc;
+  }, 0);
+}
+
+function sortRank(handsRank: HandsRank): HandsRank {
+  return handsRank.sort((a, b) => {
+    if (a[2] !== b[2]) {
+      return a[2] - b[2];
+    } else {
+      let strA = a[0];
+      let strB = b[0];
+      for (let i = 0; i < Math.min(strA.length, strB.length); i++) {
+        if (strA[i] !== strB[i]) {
+          return cardsStrength.indexOf(strA[i]) - cardsStrength.indexOf(strB[i]);
+        }
+      }
+
+      return strA.length - strB.length;
+    }
+  });
+}
+
+function getTotalWinnings(input: string[]): number {
   const hands = input.map((pair) => pair.split(' '));
-  const handsRank: Array<[string, string, number]> = [];
+  const handsRank: HandsRank = [];
 
   hands.forEach(([cards, bid]) => {
     const combinations: Record<string, number> = {};
@@ -47,25 +59,7 @@ function getTotalWinnings(input: string[]) {
     handsRank.push([cards, bid, handStrength]);
   });
 
-  handsRank.sort((a, b) => {
-    if (a[2] !== b[2]) {
-      return a[2] - b[2];
-    } else {
-      let strA = a[0];
-      let strB = b[0];
-      for (let i = 0; i < Math.min(strA.length, strB.length); i++) {
-        if (strA[i] !== strB[i]) {
-          return cardsStrength[strA[i]] - cardsStrength[strB[i]];
-        }
-      }
-      return strA.length - strB.length;
-    }
-  });
-
-  const totalWinnings = handsRank.reduce((acc, [cards, bid, cardsStrength], index) => {
-    acc += Number(bid) * (index + 1);
-    return acc;
-  }, 0);
+  const totalWinnings = calculateTotalWinnings(sortRank(handsRank));
 
   return totalWinnings;
 }
