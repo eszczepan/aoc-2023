@@ -120,8 +120,6 @@ function getTotalWinningsWithJokers(input: string[]): number {
     handsRank.push([cards, bid, handStrength]);
   });
 
-  const onlyJ = handsRank.filter((rank) => rank[0].includes('J'));
-  console.log(sortRank(onlyJ, cardsStrength));
   return calculateTotalWinnings(sortRank(handsRank, cardsStrength));
 }
 const totalWinnings = getTotalWinnings(input);
