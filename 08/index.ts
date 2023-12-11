@@ -26,20 +26,15 @@ function createElementsObject(elements: string[]) {
 function getStepsToZZZ(input: string[]): number {
   const { sequence, elements } = parseInput(input);
   const elementsObject = createElementsObject(elements);
-  let currentElement = Object.keys(elementsObject)[0];
+  let currentElement = 'AAA';
   let steps = 0;
 
-  for (let i = 0; i < sequence.length; i++) {
-    const direction = sequence[i] === 'L' ? 0 : 1;
-    currentElement = direction ? elementsObject[currentElement][1] : elementsObject[currentElement][0];
-    steps++;
-    console.log(currentElement);
-    if (currentElement === 'ZZZ') {
-      break;
-    }
-
-    if (i === sequence.length - 1) {
-      i = -1;
+  while (currentElement !== 'ZZZ') {
+    for (let i = 0; i < sequence.length; i++) {
+      const direction = sequence[i] === 'L' ? 0 : 1;
+      currentElement = direction ? elementsObject[currentElement][1] : elementsObject[currentElement][0];
+      steps++;
+      if (currentElement === 'ZZZ') break;
     }
   }
 
